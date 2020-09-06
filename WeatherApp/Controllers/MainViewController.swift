@@ -9,12 +9,19 @@
 import UIKit
 
 class MainViewController: UITabBarController {
+    
+    private var currentWeatherVC: CurrentWeatherViewController {
+        let CWVC = CurrentWeatherViewController()
+        let tabBarItem = UITabBarItem(title: "Today", image: UIImage(systemName: "sun.min"), selectedImage: UIImage(systemName: "sun.min.fill"))
+        CWVC.tabBarItem = tabBarItem
+        return CWVC
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        let currentWeatherVC = ViewController()
+            
         self.viewControllers = [currentWeatherVC]
     }
     

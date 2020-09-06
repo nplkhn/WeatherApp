@@ -1,22 +1,26 @@
 //
-//  ViewController.swift
+//  CurrentWeatherViewController.swift
 //  WeatherApp
 //
-//  Created by Никита Плахин on 9/3/20.
+//  Created by Никита Плахин on 9/4/20.
 //  Copyright © 2020 Никита Плахин. All rights reserved.
 //
 
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController {
+let apiKey = "bcb8b5667d5b57bf338f17d31d0b0e1e"
+
+class CurrentWeatherViewController: UIViewController {
     
+    var weatherViewModel: CurrentWeatherViewModel? = nil
     let locationManager = CLLocationManager()
-    private var weatherViewModel: CurrentWeatherViewModel?
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
         let activityIndicator = UIActivityIndicatorView(style: .large)
         
         activityIndicator.color = .white
@@ -32,16 +36,15 @@ class ViewController: UIViewController {
             locationManager.delegate = self
             locationManager.requestLocation()
         }
-    
         
+        // Do any additional setup after loading the view.
     }
-
-
 }
 
-extension ViewController: CLLocationManagerDelegate {
+extension CurrentWeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        
         let parser = weatherDataParser()
         parser.parseCurrentWeather(url: "https://api.openweathermap.org/data/2.5/weather?lat=\(locValue.latitude)&lon=\(locValue.longitude)&appid=\(apiKey)") { (weatherData) in
             self.weatherViewModel = CurrentWeatherViewModel(currentWeather: weatherData)
@@ -50,6 +53,8 @@ extension ViewController: CLLocationManagerDelegate {
                 DispatchQueue.main.async {
                                     let weatherView = CurrentWeatherView(frame: self.view.bounds)
                     weatherView.weather = weather
+                    
+                    
                     self.view.addSubview(weatherView)
                 }
 
@@ -61,4 +66,3 @@ extension ViewController: CLLocationManagerDelegate {
         print(error.localizedDescription)
     }
 }
-

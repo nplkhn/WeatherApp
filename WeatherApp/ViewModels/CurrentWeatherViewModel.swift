@@ -26,62 +26,64 @@ class CurrentWeatherViewModel {
         
         var resultImage = UIImage()
         
+        
+        
         switch hour {
         case sunriseHour..<sunsetHour:
             switch currentWeather.weather[0].id {
             case 200...232:
-                resultImage = UIImage(systemName: "cloud.bolt.rain.fill")!
+                resultImage = UIImage(named: "storm-1")!
             case 300...321:
-                resultImage = UIImage(systemName: "cloud.drizzle.fill")!
+                resultImage = UIImage(named: "rain-3")!
             case 500, 501:
-                resultImage = UIImage(systemName: "cloud.sun.rain.fill")!
+                resultImage = UIImage(named: "rain-1")!
             case 511:
-                resultImage = UIImage(systemName: "cloud.snow.fill")!
+                resultImage = UIImage(named: "snowy-2")!
             case 502...504, 520...531:
-                resultImage = UIImage(systemName: "cloud.heavyrain.fill")!
+                resultImage = UIImage(named: "storm-2")!
             case 600...602, 620...622:
-                resultImage = UIImage(systemName: "cloud.snow.fill")!
+                resultImage = UIImage(named: "snowy-2")!
             case 611...616:
-                resultImage = UIImage(systemName: "cloud.sleet.fill")!
+                resultImage = UIImage(named: "snowy-1")!
             case 700...781:
-                resultImage = UIImage(systemName: "cloud.fog.fill")!
+                resultImage = UIImage(named: "fog")!
             case 800:
-                resultImage = UIImage(systemName: "sun.max.fill")!
+                resultImage = UIImage(named: "sun")!
             case 801:
-                resultImage = UIImage(systemName: "cloud.sun.fill")!
+                resultImage = UIImage(named: "cloudy")!
             case 802:
-                resultImage = UIImage(systemName: "cloud.fill")!
+                resultImage = UIImage(named: "cloudy-2")!
             case 803, 804:
-                resultImage = UIImage(systemName: "smoke.fill")!
+                resultImage = UIImage(named: "cloudy")!
             default:
                 break
             }
         default:
             switch currentWeather.weather[0].id {
             case 200...232:
-                resultImage = UIImage(systemName: "cloud.bolt.rain.fill")!
+                resultImage = UIImage(named: "storm-1")!
             case 300...321:
-                resultImage = UIImage(systemName: "cloud.drizzle.fill")!
+                resultImage = UIImage(named: "rain-4")!
             case 500, 501:
-                resultImage = UIImage(systemName: "cloud.moon.rain.fill")!
+                resultImage = UIImage(named: "rain-2")!
             case 511:
-                resultImage = UIImage(systemName: "cloud.snow.fill")!
+                resultImage = UIImage(named: "snowy-2")!
             case 502...504, 520...531:
-                resultImage = UIImage(systemName: "cloud.heavyrain.fill")!
+                resultImage = UIImage(named: "storm-2")!
             case 600...602, 620...622:
-                resultImage = UIImage(systemName: "cloud.snow.fill")!
+                resultImage = UIImage(named: "snowy-2")!
             case 611...616:
-                resultImage = UIImage(systemName: "cloud.sleet.fill")!
+                resultImage = UIImage(named: "snowy-1")!
             case 700...781:
-                resultImage = UIImage(systemName: "cloud.fog.fill")!
+                resultImage = UIImage(named: "fog")!
             case 800:
-                resultImage = UIImage(systemName: "moon.stars.fill")!
+                resultImage = UIImage(named: "night")!
             case 801:
-                resultImage = UIImage(systemName: "cloud.moon.fill")!
+                resultImage = UIImage(named: "cloudy-1")!
             case 802:
-                resultImage = UIImage(systemName: "cloud.fill")!
+                resultImage = UIImage(named: "cloudy-2")!
             case 803, 804:
-                resultImage = UIImage(systemName: "smoke.fill")!
+                resultImage = UIImage(named: "cloudy-1")!
             default:
                 break
             }
@@ -91,8 +93,16 @@ class CurrentWeatherViewModel {
         
     }
     
+    public var weatherType: String {
+        return "\(currentWeather.weather[0].main)"
+    }
+    
     public var location: String {
         return "\(currentWeather.name), \(currentWeather.sys.country)"
+    }
+    
+    public var generalInfo: String {
+        return "\(temperature) | \(weatherType)"
     }
     
     public var temperature: String {
@@ -108,7 +118,8 @@ class CurrentWeatherViewModel {
     }
     
     public var windSpeed: String {
-        return "\(currentWeather.wind.speed * 3.6) km/h"
+        let speed = currentWeather.wind.speed * 3.6
+        return String(format: "%.1f", speed) + " km/h"
     }
     
     public var windDirection: String {

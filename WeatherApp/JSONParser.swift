@@ -15,7 +15,7 @@ class weatherDataParser {
     
     private var parserCompletionHandler: ((CurrentWeather) -> Void)?
     
-    func parseFeed(url: String, completeionHandler: ((CurrentWeather) -> Void)?) {
+    func parseCurrentWeather(url: String, completeionHandler: ((CurrentWeather) -> Void)?) {
         self.parserCompletionHandler = completeionHandler
         
         let request = URLRequest(url: URL(string: url)!)

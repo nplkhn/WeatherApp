@@ -15,11 +15,13 @@ class CurrentWeatherViewController: UIViewController {
     
     var weatherViewModel: CurrentWeatherViewModel? = nil
     let locationManager = CLLocationManager()
+    var weatherView: CurrentWeatherView? = nil
     
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.backgroundColor = .lightGray
         
         let activityIndicator = UIActivityIndicatorView(style: .large)
         
@@ -28,7 +30,7 @@ class CurrentWeatherViewController: UIViewController {
         self.view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
         
-
+        
         
         self.locationManager.requestAlwaysAuthorization()
         
@@ -37,7 +39,21 @@ class CurrentWeatherViewController: UIViewController {
             locationManager.requestLocation()
         }
         
-        // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillLayoutSubviews() {
+        if let weatherView = weatherView {
+            self.view.backgroundColor = .white
+            
+            weatherView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                NSLayoutConstraint(item: weatherView, attribute: .leading, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .leading, multiplier: 1, constant: 0),
+                NSLayoutConstraint(item: weatherView, attribute: .top, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 0),
+                NSLayoutConstraint(item: weatherView, attribute: .trailing, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .trailing, multiplier: 1, constant: 0),
+                NSLayoutConstraint(item: weatherView, attribute: .bottom, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0),
+            ])
+        }
     }
 }
 
@@ -51,13 +67,15 @@ extension CurrentWeatherViewController: CLLocationManagerDelegate {
             
             if let weather = self.weatherViewModel {
                 DispatchQueue.main.async {
-                                    let weatherView = CurrentWeatherView(frame: self.view.bounds)
+                    let weatherView = CurrentWeatherView(frame: self.view.bounds)
                     weatherView.weather = weather
+                    
+                    
+                    self.weatherView = weatherView
                     
                     
                     self.view.addSubview(weatherView)
                 }
-
             }
         }
     }

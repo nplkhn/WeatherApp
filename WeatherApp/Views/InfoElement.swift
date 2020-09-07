@@ -18,6 +18,7 @@ class InfoElement: UIStackView {
         
         textLabel = UILabel()
         textLabel?.text = text
+        
         textLabel?.textAlignment = .center
         textLabel?.font = UIFont.systemFont(ofSize: 18, weight: .light)
         
@@ -26,7 +27,15 @@ class InfoElement: UIStackView {
         self.addArrangedSubview(imageView!)
         self.addArrangedSubview(textLabel!)
         self.axis = .vertical
-        self.distribution = .fillEqually
+//        self.distribution = .fillEqually
+        
+        
+        imageView?.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            // image view
+            NSLayoutConstraint(item: imageView!, attribute: .height, relatedBy: .equal, toItem: self, attribute: .width, multiplier: 1, constant: 0),
+            
+        ])
     }
     
     override init(frame: CGRect) {

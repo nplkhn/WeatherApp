@@ -144,4 +144,25 @@ class CurrentWeatherViewModel {
             return ""
         }
     }
+    
+    public var sunrise: String {
+        let date = Date(timeIntervalSince1970: TimeInterval(currentWeather.sys.sunrise))
+        let calendar = Calendar.current
+        
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        
+        return "\(hour):\(minute)"
+    }
+    
+    public var sunset: String {
+        let date = Date(timeIntervalSince1970: TimeInterval(currentWeather.sys.sunset))
+        let calendar = Calendar.current
+        
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        
+        return "\(hour):\(minute)"
+    }
+
 }

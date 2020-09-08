@@ -122,6 +122,10 @@ class CurrentWeatherViewModel {
         return String(format: "%.1f", speed) + " km/h"
     }
     
+    public var feelsLike: String {
+        return "\(currentWeather.main.feelsLike) ºC"
+    }
+    
     public var windDirection: String {
         switch currentWeather.wind.deg {
         case 330...360, 0..<30:
@@ -163,6 +167,13 @@ class CurrentWeatherViewModel {
         let minute = calendar.component(.minute, from: date)
         
         return "\(hour):\(minute)"
+    }
+    
+    public var sharedInfo: String {
+        return """
+        \(location), \(temperature), feels like \(feelsLike);
+        Wind: \(windSpeed), \(windDirection).
+        """
     }
 
 }

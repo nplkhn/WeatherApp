@@ -172,17 +172,7 @@ class CurrentWeatherView: UIView {
             NSLayoutConstraint(item: containerStackView!, attribute: .bottom, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0),
         ]
         
-        //        self.currentConstraints = [
-        //            // container stack view
-        //            NSLayoutConstraint.init(item: containerStackView!, attribute: .centerY, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .centerY, multiplier: 1, constant: 0),
-        //            NSLayoutConstraint.init(item: containerStackView!, attribute: .height, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .height, multiplier: 0.9, constant: 0),
-        //            NSLayoutConstraint.init(item: containerStackView!, attribute: .width, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .width, multiplier: 1, constant: 0),
-        //
-        //            // info elements stack view
-        //            NSLayoutConstraint.init(item: infoElementsStackView!, attribute: .width, relatedBy: .equal, toItem: containerStackView!.safeAreaLayoutGuide, attribute: .width, multiplier: 0.9, constant: 0),
-        //        ]
-        
-                NSLayoutConstraint.activate(self.currentConstraints)
+        NSLayoutConstraint.activate(self.currentConstraints)
     }
     
     public func updateLayout() {

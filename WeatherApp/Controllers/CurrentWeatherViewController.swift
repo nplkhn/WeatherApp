@@ -58,6 +58,7 @@ class CurrentWeatherViewController: UIViewController {
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         self.weatherView?.updateLayout()
+        
     }
 }
 
@@ -77,8 +78,9 @@ extension CurrentWeatherViewController: CLLocationManagerDelegate {
                     
                     self.weatherView = weatherView
                     
-                    
                     self.view.addSubview(weatherView)
+                    
+                    weatherView.shareButton.addTarget(self, action: #selector(self.share), for: .touchUpInside)
                 }
             }
         }
@@ -87,4 +89,14 @@ extension CurrentWeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error.localizedDescription)
     }
+}
+
+extension CurrentWeatherViewController {
+    
+    @objc func share() {
+        
+        let activityVC = UIActivityViewController(activityItems: [weatherViewModel!.sharedInfo], applicationActivities: nil)
+        present(activityVC, animated: true, completion: nil)
+    }
+    
 }

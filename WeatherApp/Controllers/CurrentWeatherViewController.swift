@@ -55,6 +55,10 @@ class CurrentWeatherViewController: UIViewController {
             ])
         }
     }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        self.weatherView?.updateLayout()
+    }
 }
 
 extension CurrentWeatherViewController: CLLocationManagerDelegate {

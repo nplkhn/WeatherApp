@@ -10,16 +10,27 @@ import UIKit
 
 class CurrentWeatherView: UIView {
     
-    public var weatherImageView: UIImageView = UIImageView()
-    public var locationLabel: UILabel = UILabel()
-    public var infoLabel: UILabel = UILabel()
-    public var humidity: InfoElement = InfoElement(image: UIImage(named: "humidity")!, text: "")
-    public var pressure: InfoElement = InfoElement(image: UIImage(named: "pressure")!, text: "")
-    public var windSpeed: InfoElement = InfoElement(image: UIImage(named: "windSpeed")!, text: "")
-    public var windDirection: InfoElement = InfoElement(image: UIImage(named: "windDirection")!, text: "")
-    public var sunrise: InfoElement = InfoElement(image: UIImage(named: "sunrise")!, text: "")
-    public var sunset: InfoElement = InfoElement(image: UIImage(named: "sunset")!, text: "")
-    public var shareButton: UIButton = UIButton()
+    public let weatherImageView: UIImageView = UIImageView()
+    public let locationLabel: UILabel = UILabel()
+    public let infoLabel: UILabel = UILabel()
+    public let humidity: InfoElement = InfoElement(image: UIImage(named: "humidity")!, text: "")
+    public let pressure: InfoElement = InfoElement(image: UIImage(named: "pressure")!, text: "")
+    public let windSpeed: InfoElement = InfoElement(image: UIImage(named: "windSpeed")!, text: "")
+    public let windDirection: InfoElement = InfoElement(image: UIImage(named: "windDirection")!, text: "")
+    public let sunrise: InfoElement = InfoElement(image: UIImage(named: "sunrise")!, text: "")
+    public let sunset: InfoElement = InfoElement(image: UIImage(named: "sunset")!, text: "")
+    public let shareButton: UIButton = UIButton()
+    
+    // stack views
+    var containerStackView: UIStackView?
+    var topContainerStackView: UIStackView?
+    var infoElementsStackView: UIStackView?
+    var infoElementsTopStack: UIStackView?
+    var infoElementsBottomStack: UIStackView?
+    var rightContainerStackView: UIStackView?
+    
+    private var currentConstraints: [NSLayoutConstraint] = []
+    private var rightStackView: UIStackView? = nil
     
     public var weather: CurrentWeatherViewModel? {
         didSet {
@@ -43,10 +54,8 @@ class CurrentWeatherView: UIView {
         
         backgroundColor = .white
         
-        let topContainerStackView = UIStackView(arrangedSubviews: [weatherImageView, locationLabel, infoLabel])
-        topContainerStackView.axis = .vertical
-//        topContainerStackView.distribution = .
-        
+        topContainerStackView = UIStackView(arrangedSubviews: [weatherImageView, locationLabel, infoLabel])
+        topContainerStackView?.axis = .vertical
         
         // location label setup
         locationLabel.textAlignment = .center
@@ -58,25 +67,25 @@ class CurrentWeatherView: UIView {
         infoLabel.textColor = .systemBlue
         
         // info elemnents top stack view setup
-        let infoElementsTopStack = UIStackView(arrangedSubviews: [humidity, pressure, windSpeed, windDirection])
-        infoElementsTopStack.axis = .horizontal
-        infoElementsTopStack.distribution = .fillEqually
-        infoElementsTopStack.spacing = 20
+        infoElementsTopStack = UIStackView(arrangedSubviews: [humidity, pressure, windSpeed, windDirection])
+        infoElementsTopStack?.axis = .horizontal
+        infoElementsTopStack?.distribution = .fillEqually
+        infoElementsTopStack?.spacing = 20
         
         // info elements bottom stack view setup
-        let infoElementsBottomStack = UIStackView(arrangedSubviews: [sunrise, sunset])
-        infoElementsBottomStack.axis = .horizontal
-        infoElementsBottomStack.distribution = .fillEqually
-        infoElementsBottomStack.spacing = 30
+        infoElementsBottomStack = UIStackView(arrangedSubviews: [sunrise, sunset])
+        infoElementsBottomStack?.axis = .horizontal
+        infoElementsBottomStack?.distribution = .fillEqually
+        infoElementsBottomStack?.spacing = 30
         
         
         // info elements stack view setup
-        let infoElementsStackView = UIStackView(arrangedSubviews: [infoElementsTopStack, infoElementsBottomStack])
-        infoElementsStackView.axis = .vertical
-        infoElementsStackView.distribution = .fillEqually
-        infoElementsStackView.alignment = .center
-        infoElementsStackView.setCustomSpacing(100, after: infoElementsTopStack)
-        infoElementsStackView.translatesAutoresizingMaskIntoConstraints = false
+        infoElementsStackView = UIStackView(arrangedSubviews: [infoElementsTopStack!, infoElementsBottomStack!])
+        infoElementsStackView?.axis = .vertical
+        infoElementsStackView?.distribution = .fillEqually
+        infoElementsStackView?.alignment = .center
+        
+        infoElementsStackView?.translatesAutoresizingMaskIntoConstraints = false
         
         // share button setup
         shareButton.setTitle("Share", for: .normal)
@@ -84,45 +93,103 @@ class CurrentWeatherView: UIView {
         shareButton.titleLabel?.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
         
         // container stack view setup
-        let containerStackView = UIStackView(arrangedSubviews: [topContainerStackView, infoElementsStackView, shareButton])
-        containerStackView.axis = .vertical
-        containerStackView.distribution = .equalCentering
-        containerStackView.alignment = .center
-//        containerStackView.spacing = 25
-        containerStackView.setCustomSpacing(100, after: topContainerStackView)
+        containerStackView = UIStackView(arrangedSubviews: [topContainerStackView!, infoElementsStackView!, shareButton])
         
-        containerStackView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(containerStackView)
+        containerStackView?.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(containerStackView!)
         
-
-        
-        NSLayoutConstraint.activate([
-            // container stack view
-            NSLayoutConstraint.init(item: containerStackView, attribute: .centerY, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .centerY, multiplier: 1, constant: 0),
-            NSLayoutConstraint.init(item: containerStackView, attribute: .height, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .height, multiplier: 0.9, constant: 0),
-            NSLayoutConstraint.init(item: containerStackView, attribute: .width, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .width, multiplier: 1, constant: 0),
-
-            // top container stack view
-//            NSLayoutConstraint(item: topContainerStackView, attribute: .height, relatedBy: .equal, toItem: containerStackView.safeAreaLayoutGuide, attribute: .height, multiplier: 0.3, constant: 0),
-            
-            
-            // info elements stack view
-//            NSLayoutConstraint.init(item: infoElementsStackView, attribute: .height, relatedBy: .equal, toItem: containerStackView.safeAreaLayoutGuide, attribute: .height, multiplier: 0.3, constant: 0),
-            NSLayoutConstraint.init(item: infoElementsStackView, attribute: .width, relatedBy: .equal, toItem: containerStackView.safeAreaLayoutGuide, attribute: .width, multiplier: 0.9, constant: 0),
-            
-            // share button
-//            NSLayoutConstraint(item: shareButton, attribute: .height, relatedBy: .equal, toItem: containerStackView.safeAreaLayoutGuide, attribute: .height, multiplier: 0.3, constant: 0),
-            
-            // weather image view
-//            NSLayoutConstraint.init(item: weatherImageView, attribute: .height, relatedBy: .equal, toItem: containerStackView.safeAreaLayoutGuide, attribute: .width, multiplier: 1, constant: 0),
-//            NSLayoutConstraint.init(item: weatherImageView, attribute: .width, relatedBy: .equal, toItem: containerStackView.safeAreaLayoutGuide, attribute: .width, multiplier: 0.6, constant: 0),
-        ])
+        if UIDevice.current.orientation.isLandscape {
+            landscapeSetup()
+        } else {
+            portraitSetup()
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func portraitSetup() {
+        containerStackView?.axis = .vertical
+        containerStackView?.distribution = .equalCentering
+        containerStackView?.alignment = .center
+        containerStackView?.setCustomSpacing(100, after: topContainerStackView!)
+        
+        self.infoElementsStackView?.setCustomSpacing(100, after: infoElementsTopStack!)
+        
+        if self.currentConstraints.count != 0 {
+            NSLayoutConstraint.deactivate(self.currentConstraints)
+        }
+        
+        if self.rightStackView != nil {
+            self.rightStackView!.removeArrangedSubview(self.infoElementsStackView!)
+            self.rightStackView!.removeArrangedSubview(self.shareButton)
+            self.rightStackView?.removeFromSuperview()
+            self.rightStackView = nil
+            
+            self.containerStackView?.addArrangedSubview(self.infoElementsStackView!)
+            self.containerStackView?.addArrangedSubview(self.shareButton)
+        }
+        
+        self.currentConstraints = [
+            // container stack view
+            NSLayoutConstraint.init(item: containerStackView!, attribute: .centerY, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .centerY, multiplier: 1, constant: 0),
+            NSLayoutConstraint.init(item: containerStackView!, attribute: .height, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .height, multiplier: 0.9, constant: 0),
+            NSLayoutConstraint.init(item: containerStackView!, attribute: .width, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .width, multiplier: 1, constant: 0),
+            
+            // info elements stack view
+            NSLayoutConstraint.init(item: infoElementsStackView!, attribute: .width, relatedBy: .equal, toItem: containerStackView!.safeAreaLayoutGuide, attribute: .width, multiplier: 0.9, constant: 0),
+        ]
+        
+        NSLayoutConstraint.activate(self.currentConstraints)
+    }
     
+    private func landscapeSetup() {
+        containerStackView?.axis = .horizontal
+        containerStackView?.distribution = .equalCentering
+        containerStackView?.alignment = .center
+        
+        if self.currentConstraints.count != 0 {
+            NSLayoutConstraint.deactivate(self.currentConstraints)
+        }
+        
+        self.containerStackView?.removeArrangedSubview(self.infoElementsStackView!)
+        self.containerStackView?.removeArrangedSubview(self.shareButton)
+        
+        self.rightStackView = UIStackView(arrangedSubviews: [self.infoElementsStackView!, self.shareButton])
+        self.rightStackView?.axis = .vertical
+        self.rightStackView?.distribution = .equalCentering
+        self.rightStackView?.alignment = .center
+        
+        self.containerStackView?.addArrangedSubview(self.rightStackView!)
+        self.containerStackView?.setCustomSpacing(0, after: self.topContainerStackView!)
+        self.infoElementsStackView?.setCustomSpacing(50, after: infoElementsTopStack!)
+        
+        self.currentConstraints = [
+            NSLayoutConstraint(item: containerStackView!, attribute: .centerX, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .centerX, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: containerStackView!, attribute: .width, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .width, multiplier: 0.8, constant: 0),
+            NSLayoutConstraint(item: containerStackView!, attribute: .top, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: containerStackView!, attribute: .bottom, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0),
+        ]
+        
+        //        self.currentConstraints = [
+        //            // container stack view
+        //            NSLayoutConstraint.init(item: containerStackView!, attribute: .centerY, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .centerY, multiplier: 1, constant: 0),
+        //            NSLayoutConstraint.init(item: containerStackView!, attribute: .height, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .height, multiplier: 0.9, constant: 0),
+        //            NSLayoutConstraint.init(item: containerStackView!, attribute: .width, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .width, multiplier: 1, constant: 0),
+        //
+        //            // info elements stack view
+        //            NSLayoutConstraint.init(item: infoElementsStackView!, attribute: .width, relatedBy: .equal, toItem: containerStackView!.safeAreaLayoutGuide, attribute: .width, multiplier: 0.9, constant: 0),
+        //        ]
+        
+                NSLayoutConstraint.activate(self.currentConstraints)
+    }
     
+    public func updateLayout() {
+        if UIDevice.current.orientation.isLandscape {
+            landscapeSetup()
+        } else {
+            portraitSetup()
+        }
+    }
 }

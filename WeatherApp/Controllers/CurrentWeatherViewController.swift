@@ -9,39 +9,41 @@
 import UIKit
 import CoreLocation
 
-let apiKey = "bcb8b5667d5b57bf338f17d31d0b0e1e"
-
 class CurrentWeatherViewController: UIViewController {
     
     var weatherViewModel: CurrentWeatherViewModel? = nil
-    let locationManager = CLLocationManager()
     var weatherView: CurrentWeatherView? = nil
+    let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .medium)
     
+    private var coordinates: CLLocationCoordinate2D
+    
+    init(coordinates: CLLocationCoordinate2D) {
+        self.coordinates = coordinates
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = .lightGray
         
-        let activityIndicator = UIActivityIndicatorView(style: .large)
-        
         activityIndicator.color = .white
         activityIndicator.center = self.view.center
+        
         self.view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
         
-        
-        
-        self.locationManager.requestAlwaysAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.requestLocation()
-        }
-        
+        getWeatherData()
     }
     
     override func viewWillLayoutSubviews() {
+        activityIndicator.center = self.view.center
+        
         if let weatherView = weatherView {
             self.view.backgroundColor = .white
             
@@ -62,36 +64,24 @@ class CurrentWeatherViewController: UIViewController {
     }
 }
 
-extension CurrentWeatherViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+extension CurrentWeatherViewController {
+    
+    private func getWeatherData() {
         
         let parser = weatherDataParser()
-        parser.parseCurrentWeather(url: "https://api.openweathermap.org/data/2.5/weather?lat=\(locValue.latitude)&lon=\(locValue.longitude)&appid=\(apiKey)") { (weatherData) in
-            self.weatherViewModel = CurrentWeatherViewModel(currentWeather: weatherData)
-            
-            if let weather = self.weatherViewModel {
-                DispatchQueue.main.async {
-                    let weatherView = CurrentWeatherView(frame: self.view.bounds)
-                    weatherView.weather = weather
-                    
-                    
-                    self.weatherView = weatherView
-                    
-                    self.view.addSubview(weatherView)
-                    
-                    weatherView.shareButton.addTarget(self, action: #selector(self.share), for: .touchUpInside)
-                }
+        parser.parseCurrentWeather(url: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=") { (weather) in
+            self.weatherViewModel = CurrentWeatherViewModel(currentWeather: weather)
+            DispatchQueue.main.async {
+                self.weatherView = CurrentWeatherView()
+                self.weatherView?.weather = self.weatherViewModel
+                self.view.addSubview(self.weatherView!)
+                self.activityIndicator.stopAnimating()
             }
+            
+            
         }
+        
     }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
-    }
-}
-
-extension CurrentWeatherViewController {
     
     @objc func share() {
         

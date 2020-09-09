@@ -7,33 +7,54 @@
 //
 
 import UIKit
+import CoreLocation
 
 class MainViewController: UITabBarController {
     
+    private let locationManager = CLLocationManager()
+    private let loadingView = UIView()
+    private let activityIndicator = UIActivityIndicatorView(style: .medium)
+    
+    private var coords: CLLocationCoordinate2D = CLLocationCoordinate2D()
     private var currentWeatherVC: CurrentWeatherViewController {
-        let CWVC = CurrentWeatherViewController()
-        let tabBarItem = UITabBarItem(title: "Today", image: UIImage(systemName: "sun.min"), selectedImage: UIImage(systemName: "sun.min.fill"))
-        CWVC.tabBarItem = tabBarItem
-        return CWVC
+        let cwvc = CurrentWeatherViewController(coordinates: coords)
+        let tabBarItem = UITabBarItem(title: "Today", image: UIImage(systemName: "sun.min")!, selectedImage: UIImage(systemName: "sun.min.fill")!)
+        cwvc.tabBarItem = tabBarItem
+        return cwvc
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-            
-        self.viewControllers = [currentWeatherVC]
+    private var weekWeatherVC: WeekWeatherViewController {
+        let wwvc = WeekWeatherViewController(coordinates: coords)
+        let tabBarItem = UITabBarItem(title: "Forecast", image: UIImage(systemName: "cloud.sun.rain")!, selectedImage: UIImage(systemName: "cloud.sun.rain.fill")!)
+        wwvc.tabBarItem = tabBarItem
+        return wwvc
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.requestLocation()
+        }
     }
-    */
+    
+}
 
+extension MainViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let coordinates: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        self.coords = coordinates
+        
+        self.viewControllers = [self.currentWeatherVC, self.weekWeatherVC]
+        self.viewWillAppear(true)
+        self.activityIndicator.stopAnimating()
+        self.loadingView.removeFromSuperview()
+        tabBar.isHidden = false
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error.localizedDescription)
+    }
 }

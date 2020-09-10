@@ -13,13 +13,9 @@ let apiKey = "bcb8b5667d5b57bf338f17d31d0b0e1e"
 
 class weatherDataParser {
     
-    private var currentWeatherParserCompletionHandler: ((CurrentWeather) -> Void)?
-    private var weekWeatherParserCompletionHandler: ((WeekWeather) -> Void)?
-    
-    func parseCurrentWeather(url: String, completeionHandler: ((CurrentWeather) -> Void)?) {
-        self.currentWeatherParserCompletionHandler = completeionHandler
-        
+    func parseCurrentWeather(url: String, completionHandler: ((CurrentWeather) -> Void)?) {
         let request = URLRequest(url: URL(string: url + apiKey)!)
+        print(request.url!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (jsonData, _, error) in
             
@@ -34,7 +30,7 @@ class weatherDataParser {
             let decoder = JSONDecoder()
             do {
                 let weatherData = try decoder.decode(CurrentWeather.self, from: jsonData!)
-                self.currentWeatherParserCompletionHandler!(weatherData)
+                completionHandler!(weatherData)
             } catch {
                 print(error.localizedDescription)
             }
@@ -46,11 +42,10 @@ class weatherDataParser {
         
     }
     
-    func parseWeekWeather(url: String, completeionHandler: ((WeekWeather) -> Void)?) {
-        
-        self.weekWeatherParserCompletionHandler = completeionHandler
+    func parseWeekWeather(url: String, completionHandler: ((WeekWeatherModel) -> Void)?) {
         
         let request = URLRequest(url: URL(string: url + apiKey)!)
+        print(request.url!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (jsonData, _, error) in
             
@@ -64,8 +59,8 @@ class weatherDataParser {
             
             let decoder = JSONDecoder()
             do {
-                let weatherData = try decoder.decode(WeekWeather.self, from: jsonData!)
-                self.weekWeatherParserCompletionHandler!(weatherData)
+                let weatherData = try decoder.decode(WeekWeatherModel.self, from: jsonData!)
+                completionHandler!(weatherData)
             } catch {
                 print(error.localizedDescription)
             }

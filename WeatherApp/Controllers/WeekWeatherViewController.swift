@@ -11,8 +11,7 @@ import CoreLocation
 
 class WeekWeatherViewController: UIViewController {
     
-    //    private var
-    var weekWeatherViewModel: WeekWeatherViewModel? = nil
+    var weatherViewModel: WeekWeatherViewModel? = nil
     let tableView: UITableView = UITableView()
     
     private let coordinates: CLLocationCoordinate2D
@@ -21,6 +20,8 @@ class WeekWeatherViewController: UIViewController {
         self.coordinates = coordinates
         
         super.init(nibName: nil, bundle: nil)
+        
+        getWeatherData()
     }
     
     required init?(coder: NSCoder) {
@@ -39,10 +40,16 @@ class WeekWeatherViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        
+    }
+    
     private func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "weekWeatherCell")
+        tableView.rowHeight = 70
         
         NSLayoutConstraint.activate([
             NSLayoutConstraint(item: tableView, attribute: .leading, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .leading, multiplier: 1, constant: 0),
@@ -56,16 +63,62 @@ class WeekWeatherViewController: UIViewController {
         tableView.dataSource = self
     }
     
+    private func getWeatherData() {
+        let parser = weatherDataParser()
+        parser.parseWeekWeather(url: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=") { (weather) in
+            self.weatherViewModel = WeekWeatherViewModel(weekWeather: weather)
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            
+            
+        }
+        
+    }
+    
 }
 
 extension WeekWeatherViewController: UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return (weekWeatherViewModel?.weather.count) ?? 0
+        return (weatherViewModel?.weather.count) ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (weekWeatherViewModel?.weather[section].count) ?? 0
+        return (weatherViewModel?.weather[section].count) ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let date = Date(timeIntervalSince1970: TimeInterval((weatherViewModel?.weather[section][0].dt)!))
+        let calendar = Calendar.current
+        
+        
+        if section == 0 {
+            return "Today"
+        }
+        
+        switch calendar.component(.weekday, from: date) {
+        case 1:
+            return "Sunday"
+        case 2:
+            return "Monday"
+        case 3:
+            return "Tuesday"
+        case 4:
+            return "Wednesday"
+        case 5:
+            return "Thursday"
+        case 6:
+            return "Friday"
+        case 7:
+            return "Saturday"
+        default:
+            return ""
+        }
+        
+        
+        
+        
     }
     
 }
@@ -75,12 +128,12 @@ extension WeekWeatherViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "weekWeatherCell", for: indexPath) as! WeatherTableViewCell
         
-        weekWeatherViewModel?.setCurrentWeather(section: indexPath.section, row: indexPath.row)
+        weatherViewModel?.setCurrentWeather(section: indexPath.section, row: indexPath.row)
         
-        cell.imageView?.image = weekWeatherViewModel?.weatherImage
-        cell.temperatureLabel.text = weekWeatherViewModel?.temperature
-        cell.timeLabel.text = weekWeatherViewModel?.time
-        cell.weatherTypeLabel.text = weekWeatherViewModel?.weatherType
+        cell.imageView?.image = weatherViewModel?.weatherImage
+        cell.temperatureLabel.text = weatherViewModel?.temperature
+        cell.timeLabel.text = weatherViewModel?.time
+        cell.weatherTypeLabel.text = weatherViewModel?.weatherType
         
         return cell
     }

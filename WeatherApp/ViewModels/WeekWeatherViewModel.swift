@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 
 class WeekWeatherViewModel {
-    private var weekWeather: WeekWeather
-    public var weather: [[List]] = []
-    private var currentWeather: List? = nil
+    private var weekWeather: WeekWeatherModel
+    public var weather: [[WeekList]] = []
+    private var currentWeather: WeekList? = nil
     
-    init(weekWeather: WeekWeather) {
+    init(weekWeather: WeekWeatherModel) {
         self.weekWeather = weekWeather
         getWeatherByDay()
     }
@@ -28,11 +28,11 @@ class WeekWeatherViewModel {
     }
     
     public var weatherType: String {
-        return currentWeather!.weather[0].main
+        return currentWeather!.weather[0].main.rawValue
     }
     
     public var temperature: String {
-        return "\(currentWeather!.main.temp)º"
+        return String(format: "%.0f", currentWeather!.main.temp - 273.15) + "º"
     }
     
     public var time: String {
@@ -44,78 +44,38 @@ class WeekWeatherViewModel {
     }
     
     public var weatherImage: UIImage {
-        let date = Date()
-        let calendar = Calendar.current
-        let sunrise = Date(timeIntervalSince1970: TimeInterval(currentWeather!.sys.sunrise))
-        let sunset = Date(timeIntervalSince1970: TimeInterval(currentWeather!.sys.sunset))
-        let hour = calendar.component(.hour, from: date)
-        let sunriseHour = calendar.component(.hour, from: sunrise)
-        let sunsetHour = calendar.component(.hour, from: sunset)
         
         var resultImage = UIImage()
         
-        
-        
-        switch hour {
-        case sunriseHour..<sunsetHour:
-            switch currentWeather!.weather[0].id {
-            case 200...232:
-                resultImage = UIImage(named: "storm-1")!
-            case 300...321:
-                resultImage = UIImage(named: "rain-3")!
-            case 500, 501:
-                resultImage = UIImage(named: "rain-1")!
-            case 511:
-                resultImage = UIImage(named: "snowy-2")!
-            case 502...504, 520...531:
-                resultImage = UIImage(named: "storm-2")!
-            case 600...602, 620...622:
-                resultImage = UIImage(named: "snowy-2")!
-            case 611...616:
-                resultImage = UIImage(named: "snowy-1")!
-            case 700...781:
-                resultImage = UIImage(named: "fog")!
-            case 800:
-                resultImage = UIImage(named: "sun")!
-            case 801:
-                resultImage = UIImage(named: "cloudy")!
-            case 802:
-                resultImage = UIImage(named: "cloudy-2")!
-            case 803, 804:
-                resultImage = UIImage(named: "cloudy")!
-            default:
-                break
-            }
+        switch currentWeather!.weather[0].id {
+        case 200...232:
+            resultImage = UIImage(named: "storm-1")!
+        case 300...321:
+            resultImage = UIImage(named: "rain-3")!
+        case 500, 501:
+            resultImage = UIImage(named: "rain-1")!
+        case 511:
+            resultImage = UIImage(named: "snowy-2")!
+        case 502...504, 520...531:
+            resultImage = UIImage(named: "storm-2")!
+        case 600...602, 620...622:
+            resultImage = UIImage(named: "snowy-2")!
+        case 611...616:
+            resultImage = UIImage(named: "snowy-1")!
+        case 700...781:
+            resultImage = UIImage(named: "fog")!
+        case 800:
+            resultImage = UIImage(named: "sun")!
+        case 801:
+            resultImage = UIImage(named: "cloudy")!
+        case 802:
+            resultImage = UIImage(named: "cloudy-2")!
+        case 803, 804:
+            resultImage = UIImage(named: "cloudy")!
         default:
-            switch currentWeather!.weather[0].id {
-            case 200...232:
-                resultImage = UIImage(named: "storm-1")!
-            case 300...321:
-                resultImage = UIImage(named: "rain-4")!
-            case 500, 501:
-                resultImage = UIImage(named: "rain-2")!
-            case 511:
-                resultImage = UIImage(named: "snowy-2")!
-            case 502...504, 520...531:
-                resultImage = UIImage(named: "storm-2")!
-            case 600...602, 620...622:
-                resultImage = UIImage(named: "snowy-2")!
-            case 611...616:
-                resultImage = UIImage(named: "snowy-1")!
-            case 700...781:
-                resultImage = UIImage(named: "fog")!
-            case 800:
-                resultImage = UIImage(named: "night")!
-            case 801:
-                resultImage = UIImage(named: "cloudy-1")!
-            case 802:
-                resultImage = UIImage(named: "cloudy-2")!
-            case 803, 804:
-                resultImage = UIImage(named: "cloudy-1")!
-            default:
-                break
-            }
+            break
         }
+        
         
         return resultImage
         
@@ -124,15 +84,16 @@ class WeekWeatherViewModel {
     private func getWeatherByDay() {
         let calendar = Calendar.current
         var currentDay = -1
-        var currentObservations: [List] = []
+        var currentObservations: [WeekList] = []
         
         for weather in weekWeather.list {
             let date = Date(timeIntervalSince1970: TimeInterval(weather.dt))
-            let day = calendar.component(.day, from: date)
+            let day = calendar.component(.weekday, from: date)
             if currentDay == -1 {
                 currentDay = day
             } else if day != currentDay {
                 self.weather.append(currentObservations)
+                currentDay = day
                 currentObservations = []
             }
             currentObservations.append(weather)

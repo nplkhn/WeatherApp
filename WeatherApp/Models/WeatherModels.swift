@@ -24,15 +24,6 @@ struct CurrentWeather: Codable {
     let cod: Int
 }
 
-// MARK: - WeekWeatherModel
-struct WeekWeather: Codable {
-    let cod: String
-    let message: Double
-    let cnt: Int
-    let list: [List]
-    let city: City
-}
-
 // MARK: - Clouds
 struct Clouds: Codable {
     let all: Int

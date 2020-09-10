@@ -47,6 +47,8 @@ class WeatherTableViewCell: UITableViewCell {
             NSLayoutConstraint(item: containerStackView, attribute: .bottom, relatedBy: .equal, toItem: self.contentView, attribute: .bottom, multiplier: 1, constant: 0),
             NSLayoutConstraint(item: containerStackView, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 0.95, constant: 0),
         ])
+        
+        self.isUserInteractionEnabled = false
     }
     
     required init?(coder: NSCoder) {

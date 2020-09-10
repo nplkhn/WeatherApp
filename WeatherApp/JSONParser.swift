@@ -15,7 +15,6 @@ class weatherDataParser {
     
     func parseCurrentWeather(url: String, completionHandler: ((CurrentWeather) -> Void)?) {
         let request = URLRequest(url: URL(string: url + apiKey)!)
-        print(request.url!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (jsonData, _, error) in
             
@@ -45,7 +44,6 @@ class weatherDataParser {
     func parseWeekWeather(url: String, completionHandler: ((WeekWeatherModel) -> Void)?) {
         
         let request = URLRequest(url: URL(string: url + apiKey)!)
-        print(request.url!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (jsonData, _, error) in
             

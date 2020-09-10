@@ -41,8 +41,10 @@ class WeekWeatherViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        
+        super.viewWillAppear(animated)
+        if let weatherViewModel = weatherViewModel {
+            self.parent?.navigationItem.title = weatherViewModel.city
+        }
     }
     
     private func setupTableView() {
@@ -93,7 +95,7 @@ extension WeekWeatherViewController: UITableViewDelegate {
         let calendar = Calendar.current
         
         
-        if section == 0 {
+        if section == 0 && weatherViewModel?.weather.count == 5 {
             return "Today"
         }
         
@@ -115,12 +117,7 @@ extension WeekWeatherViewController: UITableViewDelegate {
         default:
             return ""
         }
-        
-        
-        
-        
     }
-    
 }
 
 extension WeekWeatherViewController: UITableViewDataSource {

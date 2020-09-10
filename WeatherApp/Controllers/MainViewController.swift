@@ -19,12 +19,16 @@ class MainViewController: UITabBarController {
     private var currentWeatherVC: CurrentWeatherViewController {
         let cwvc = CurrentWeatherViewController(coordinates: coords)
         let tabBarItem = UITabBarItem(title: "Today", image: UIImage(systemName: "sun.min")!, selectedImage: UIImage(systemName: "sun.min.fill")!)
+        tabBarItem.tag = 0
         cwvc.tabBarItem = tabBarItem
         return cwvc
     }
     private var weekWeatherVC: WeekWeatherViewController {
         let wwvc = WeekWeatherViewController(coordinates: coords)
+        let navVC = UINavigationController(rootViewController: wwvc)
+        navVC.setNavigationBarHidden(false, animated: false)
         let tabBarItem = UITabBarItem(title: "Forecast", image: UIImage(systemName: "cloud.sun.rain")!, selectedImage: UIImage(systemName: "cloud.sun.rain.fill")!)
+        tabBarItem.tag = 1
         wwvc.tabBarItem = tabBarItem
         return wwvc
     }
@@ -38,6 +42,8 @@ class MainViewController: UITabBarController {
             locationManager.delegate = self
             locationManager.requestLocation()
         }
+        
+//        self.navigationItem.title = "Today"
     }
     
 }

@@ -32,6 +32,7 @@ class CurrentWeatherViewController: UIViewController {
         
         self.view.backgroundColor = .lightGray
         
+        
         activityIndicator.color = .white
         activityIndicator.center = self.view.center
         
@@ -39,6 +40,11 @@ class CurrentWeatherViewController: UIViewController {
         activityIndicator.startAnimating()
         
         getWeatherData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        parent?.navigationItem.title = "Today"
     }
     
     override func viewWillLayoutSubviews() {

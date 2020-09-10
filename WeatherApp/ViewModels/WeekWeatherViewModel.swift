@@ -38,7 +38,7 @@ class WeekWeatherViewModel {
     public var time: String {
         let date = Date(timeIntervalSince1970: TimeInterval(currentWeather!.dt))
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "hh:mm"
+        dateFormatter.dateFormat = "HH:mm"
         
         return dateFormatter.string(from: date)
     }

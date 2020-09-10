@@ -75,6 +75,9 @@ extension CurrentWeatherViewController {
                 self.weatherView = CurrentWeatherView()
                 self.weatherView?.weather = self.weatherViewModel
                 self.view.addSubview(self.weatherView!)
+                
+                self.weatherView?.shareButton.addTarget(self, action: #selector(self.share), for: .touchUpInside)
+                
                 self.activityIndicator.stopAnimating()
             }
             

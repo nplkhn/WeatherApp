@@ -21,6 +21,7 @@ class InfoElement: UIStackView {
         
         textLabel?.textAlignment = .center
         textLabel?.font = UIFont.systemFont(ofSize: 18, weight: .light)
+        textLabel?.adjustsFontSizeToFitWidth = true
         
         super.init(frame: .zero)
         

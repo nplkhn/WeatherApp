@@ -135,7 +135,8 @@ class CurrentWeatherView: UIView {
             // container stack view
             NSLayoutConstraint.init(item: containerStackView!, attribute: .centerY, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .centerY, multiplier: 1, constant: 0),
             NSLayoutConstraint.init(item: containerStackView!, attribute: .height, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .height, multiplier: 0.9, constant: 0),
-            NSLayoutConstraint.init(item: containerStackView!, attribute: .width, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .width, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: containerStackView!, attribute: .leading, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .leading, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: containerStackView!, attribute: .trailing, relatedBy: .equal, toItem: self.safeAreaLayoutGuide, attribute: .trailing, multiplier: 1, constant: 0),
             
             // info elements stack view
             NSLayoutConstraint.init(item: infoElementsStackView!, attribute: .width, relatedBy: .equal, toItem: containerStackView!.safeAreaLayoutGuide, attribute: .width, multiplier: 0.9, constant: 0),

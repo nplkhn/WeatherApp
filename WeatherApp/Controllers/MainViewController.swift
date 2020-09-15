@@ -14,33 +14,24 @@ class MainViewController: UITabBarController {
     private let locationManager = CLLocationManager()
     private let loadingView = UIView()
     private let activityIndicator = UIActivityIndicatorView(style: .medium)
-    weak var weakSelf: MainViewController? = nil
     
-    private var coords: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    private var currentWeatherVC: CurrentWeatherViewController {
-        let cwvc = CurrentWeatherViewController(coordinates: coords)
-        let tabBarItem = UITabBarItem(title: "Today", image: UIImage(systemName: "sun.min")!, selectedImage: UIImage(systemName: "sun.min.fill")!)
-        tabBarItem.tag = 0
-        cwvc.tabBarItem = tabBarItem
-        return cwvc
+    private var coords: CLLocationCoordinate2D? {
+        didSet {
+            self.currentWeatherVC.coordinates = coords
+            self.weekWeatherVC.coordinates = coords
+        }
     }
-    private var weekWeatherVC: WeekWeatherViewController {
-        let wwvc = WeekWeatherViewController(coordinates: coords)
-        let navVC = UINavigationController(rootViewController: wwvc)
-        navVC.setNavigationBarHidden(false, animated: false)
-        let tabBarItem = UITabBarItem(title: "Forecast", image: UIImage(systemName: "cloud.sun.rain")!, selectedImage: UIImage(systemName: "cloud.sun.rain.fill")!)
-        tabBarItem.tag = 1
-        wwvc.tabBarItem = tabBarItem
-        return wwvc
-    }
+    private var currentWeatherVC: CurrentWeatherViewController = CurrentWeatherViewController()
+    private var weekWeatherVC: WeekWeatherViewController = WeekWeatherViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupLoadingView()
+        setupViewControllers()
+        
+        self.viewControllers = [self.currentWeatherVC, self.weekWeatherVC]
         
         locationManager.requestWhenInUseAuthorization()
-        weakSelf = self
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.requestLocation()
@@ -54,41 +45,20 @@ class MainViewController: UITabBarController {
         self.navigationController?.isNavigationBarHidden = true
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        self.activityIndicator.center = self.view.center
+    private func setupViewControllers() {
+        
+        let currentTabBarItem = UITabBarItem(title: "Today", image: UIImage(systemName: "sun.min")!, selectedImage: UIImage(systemName: "sun.min.fill")!)
+        currentWeatherVC.tabBarItem = currentTabBarItem
+        
+        let weekTabBarItem = UITabBarItem(title: "Forecast", image: UIImage(systemName: "cloud.sun.rain")!, selectedImage: UIImage(systemName: "cloud.sun.rain.fill")!)
+        weekWeatherVC.tabBarItem = weekTabBarItem
     }
-    
-    func setupLoadingView() {
-        loadingView.backgroundColor = .lightGray
-        loadingView.addSubview(activityIndicator)
-        activityIndicator.color = .white
-        activityIndicator.center = self.view.center
-        loadingView.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.view.addSubview(loadingView)
-        
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: loadingView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: loadingView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: loadingView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: loadingView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0),
-        ])
-        
-        activityIndicator.startAnimating()
-    }
-    
 }
 
 extension MainViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let coordinates: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        weakSelf!.coords = coordinates
-        
-        weakSelf!.viewControllers = [self.currentWeatherVC, self.weekWeatherVC]
-        weakSelf!.viewWillAppear(true)
-        weakSelf!.activityIndicator.stopAnimating()
-        weakSelf!.loadingView.removeFromSuperview()
-        self.navigationController?.isNavigationBarHidden = false
+        self.coords = coordinates
     }
     
     func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {

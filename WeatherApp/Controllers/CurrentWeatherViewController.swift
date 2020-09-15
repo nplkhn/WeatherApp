@@ -15,16 +15,10 @@ class CurrentWeatherViewController: UIViewController {
     var weatherView: CurrentWeatherView? = nil
     let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .medium)
     
-    private var coordinates: CLLocationCoordinate2D
-    
-    init(coordinates: CLLocationCoordinate2D) {
-        self.coordinates = coordinates
-        
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    var coordinates: CLLocationCoordinate2D? {
+        didSet {
+            getWeatherData()
+        }
     }
     
     override func viewDidLoad() {
@@ -38,8 +32,6 @@ class CurrentWeatherViewController: UIViewController {
         
         self.view.addSubview(activityIndicator)
         activityIndicator.startAnimating()
-        
-        getWeatherData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,7 +67,7 @@ extension CurrentWeatherViewController {
     private func getWeatherData() {
         
         let parser = weatherDataParser()
-        parser.parseCurrentWeather(url: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=") { (weather) in
+        parser.parseCurrentWeather(url: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates!.latitude)&lon=\(coordinates!.longitude)&appid=") { (weather) in
             self.weatherViewModel = CurrentWeatherViewModel(currentWeather: weather)
             DispatchQueue.main.async {
                 self.weatherView = CurrentWeatherView()
@@ -86,8 +78,6 @@ extension CurrentWeatherViewController {
                 
                 self.activityIndicator.stopAnimating()
             }
-            
-            
         }
         
     }

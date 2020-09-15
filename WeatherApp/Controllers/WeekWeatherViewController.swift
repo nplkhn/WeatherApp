@@ -14,19 +14,12 @@ class WeekWeatherViewController: UIViewController {
     var weatherViewModel: WeekWeatherViewModel? = nil
     let tableView: UITableView = UITableView()
     
-    private let coordinates: CLLocationCoordinate2D
-    
-    init(coordinates: CLLocationCoordinate2D) {
-        self.coordinates = coordinates
-        
-        super.init(nibName: nil, bundle: nil)
-        
-        getWeatherData()
+    var coordinates: CLLocationCoordinate2D? {
+        didSet {
+            getWeatherData()
+        }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +60,7 @@ class WeekWeatherViewController: UIViewController {
     
     private func getWeatherData() {
         let parser = weatherDataParser()
-        parser.parseWeekWeather(url: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=") { (weather) in
+        parser.parseWeekWeather(url: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates!.latitude)&lon=\(coordinates!.longitude)&appid=") { (weather) in
             self.weatherViewModel = WeekWeatherViewModel(weekWeather: weather)
             DispatchQueue.main.async {
                 self.tableView.reloadData()

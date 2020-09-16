@@ -45,39 +45,33 @@ class WeekWeatherViewModel {
     
     public var weatherImage: UIImage {
         
-        var resultImage = UIImage()
+        var resultImage: UIImage?
         
-        switch currentWeather!.weather[0].id {
-        case 200...232:
-            resultImage = UIImage(named: "storm-1")!
-        case 300...321:
-            resultImage = UIImage(named: "rain-3")!
-        case 500, 501:
-            resultImage = UIImage(named: "rain-1")!
-        case 511:
-            resultImage = UIImage(named: "snowy-2")!
-        case 502...504, 520...531:
-            resultImage = UIImage(named: "storm-2")!
-        case 600...602, 620...622:
-            resultImage = UIImage(named: "snowy-2")!
-        case 611...616:
-            resultImage = UIImage(named: "snowy-1")!
-        case 700...781:
-            resultImage = UIImage(named: "fog")!
-        case 800:
-            resultImage = UIImage(named: "sun")!
-        case 801:
-            resultImage = UIImage(named: "cloudy")!
-        case 802:
-            resultImage = UIImage(named: "cloudy-2")!
-        case 803, 804:
-            resultImage = UIImage(named: "cloudy")!
-        default:
-            break
+        if let weatherId = currentWeather?.weather[0].id {
+            if (200...232).contains(weatherId) {
+                resultImage = UIImage(named: "storm-1")
+            } else if (300...321).contains(weatherId) {
+                resultImage = UIImage(named: "rain-2-d")
+            } else if (500...501).contains(weatherId) {
+                resultImage = UIImage(named: "rain-1-d")
+            } else if weatherId == 501 || (600...602).contains(weatherId) || (620...622).contains(weatherId) {
+                resultImage = UIImage(named: "snowy-2")
+            } else if (502...504).contains(weatherId) || (520...531).contains(weatherId) {
+                resultImage = UIImage(named: "storm-2")
+            } else if (611...616).contains(weatherId) {
+                resultImage = UIImage(named: "snowy-1")
+            } else if (700...781).contains(weatherId) {
+                resultImage = UIImage(named: "fog")
+            } else if weatherId == 800 {
+                resultImage = UIImage(named: "sun")
+            } else if weatherId == 801 || (803...804).contains(weatherId) {
+                resultImage = UIImage(named: "cloudy-d")
+            } else if weatherId == 802 {
+                resultImage = UIImage(named: "cloudy")
+            }
         }
         
-        
-        return resultImage
+        return resultImage ?? UIImage(systemName: "cloud")!
         
     }
     

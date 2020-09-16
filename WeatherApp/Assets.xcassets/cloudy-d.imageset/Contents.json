@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "044-cloudy-2.png",
+      "filename" : "046-cloudy.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "044-cloudy-3.png",
+      "filename" : "046-cloudy-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "044-cloudy-4.png",
+      "filename" : "046-cloudy-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

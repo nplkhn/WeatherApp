@@ -6,6 +6,10 @@
 //  Copyright © 2020 Никита Плахин. All rights reserved.
 //
 
+
+// MARK: refactor switches
+
+
 import Foundation
 import UIKit
 
@@ -19,79 +23,52 @@ class CurrentWeatherViewModel {
     
     public var weatherImage: UIImage {
         let date = Date()
-        let calendar = Calendar.current
         let sunrise = Date(timeIntervalSince1970: TimeInterval(currentWeather.sys.sunrise))
         let sunset = Date(timeIntervalSince1970: TimeInterval(Int(currentWeather.sys.sunset)))
-        let hour = calendar.component(.hour, from: date)
-        let sunriseHour = calendar.component(.hour, from: sunrise)
-        let sunsetHour = calendar.component(.hour, from: sunset)
+        let currentHour = Calendar.current.component(.hour, from: date)
+        let sunriseHour = Calendar.current.component(.hour, from: sunrise)
+        let sunsetHour = Calendar.current.component(.hour, from: sunset)
         
-        var resultImage = UIImage()
+        var resultImage: UIImage?
+        let weatherId = currentWeather.weather[0].id
         
-        
-        
-        switch hour {
-        case sunriseHour..<sunsetHour:
-            switch currentWeather.weather[0].id {
-            case 200...232:
-                resultImage = UIImage(named: "storm-1")!
-            case 300...321:
-                resultImage = UIImage(named: "rain-3")!
-            case 500, 501:
-                resultImage = UIImage(named: "rain-1")!
-            case 511:
-                resultImage = UIImage(named: "snowy-2")!
-            case 502...504, 520...531:
-                resultImage = UIImage(named: "storm-2")!
-            case 600...602, 620...622:
-                resultImage = UIImage(named: "snowy-2")!
-            case 611...616:
-                resultImage = UIImage(named: "snowy-1")!
-            case 700...781:
-                resultImage = UIImage(named: "fog")!
-            case 800:
-                resultImage = UIImage(named: "sun")!
-            case 801:
-                resultImage = UIImage(named: "cloudy")!
-            case 802:
-                resultImage = UIImage(named: "cloudy-2")!
-            case 803, 804:
-                resultImage = UIImage(named: "cloudy")!
-            default:
-                break
-            }
-        default:
-            switch currentWeather.weather[0].id {
-            case 200...232:
-                resultImage = UIImage(named: "storm-1")!
-            case 300...321:
-                resultImage = UIImage(named: "rain-4")!
-            case 500, 501:
-                resultImage = UIImage(named: "rain-2")!
-            case 511:
-                resultImage = UIImage(named: "snowy-2")!
-            case 502...504, 520...531:
-                resultImage = UIImage(named: "storm-2")!
-            case 600...602, 620...622:
-                resultImage = UIImage(named: "snowy-2")!
-            case 611...616:
-                resultImage = UIImage(named: "snowy-1")!
-            case 700...781:
-                resultImage = UIImage(named: "fog")!
-            case 800:
-                resultImage = UIImage(named: "night")!
-            case 801:
-                resultImage = UIImage(named: "cloudy-1")!
-            case 802:
-                resultImage = UIImage(named: "cloudy-2")!
-            case 803, 804:
-                resultImage = UIImage(named: "cloudy-1")!
-            default:
-                break
+        if (200...232).contains(weatherId) {
+            resultImage = UIImage(named: "storm-1")
+        } else if weatherId == 511 || (600...602).contains(weatherId) || (620...622).contains(weatherId) {
+            resultImage = UIImage(named: "snowy-2")
+        } else if (502...504).contains(weatherId) || (520...531).contains(weatherId) {
+            resultImage = UIImage(named: "storm-2")
+        } else if (611...616).contains(weatherId) {
+            resultImage = UIImage(named: "snowy-1")
+        } else if (700...781).contains(weatherId) {
+            resultImage = UIImage(named: "fog")
+        } else if weatherId == 802 {
+            resultImage = UIImage(named: "cloudy")
+        } else {
+            if (sunriseHour..<sunsetHour).contains(currentHour) {
+                if (300...321).contains(weatherId) {
+                    resultImage = UIImage(named: "rain-2-d")
+                } else if (500...501).contains(weatherId) {
+                    resultImage = UIImage(named: "rain-1-d")
+                } else if weatherId == 800 {
+                    resultImage = UIImage(named: "sun")
+                } else if weatherId == 801 || (803...804).contains(weatherId) {
+                    resultImage = UIImage(named: "cloudy-d")
+                }
+            } else {
+                if (300...321).contains(weatherId) {
+                    resultImage = UIImage(named: "rain-2-n")
+                } else if (500...501).contains(weatherId) {
+                    resultImage = UIImage(named: "rain-1-n")
+                } else if weatherId == 800 {
+                    resultImage = UIImage(named: "night")
+                } else if weatherId == 801 || (803...804).contains(weatherId) {
+                    resultImage = UIImage(named: "cloudy-n")
+                }
             }
         }
         
-        return resultImage
+        return resultImage ?? UIImage(systemName: "cloud")!
         
     }
     
@@ -177,5 +154,5 @@ class CurrentWeatherViewModel {
         Wind: \(windSpeed), \(windDirection).
         """
     }
-
+    
 }

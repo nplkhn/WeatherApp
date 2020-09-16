@@ -7,15 +7,12 @@
 //
 
 import UIKit
-import CoreLocation
 
 class MainViewController: UITabBarController {
     
-    private let locationManager = CLLocationManager()
-    private let loadingView = UIView()
     private let activityIndicator = UIActivityIndicatorView(style: .medium)
     
-    private var coords: CLLocationCoordinate2D? {
+    var coords: Coordinates? {
         didSet {
             self.currentWeatherVC.coordinates = coords
             self.weekWeatherVC.coordinates = coords
@@ -30,12 +27,6 @@ class MainViewController: UITabBarController {
         setupViewControllers()
         
         self.viewControllers = [self.currentWeatherVC, self.weekWeatherVC]
-        
-        locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.requestLocation()
-        }
         
     }
     
@@ -55,17 +46,3 @@ class MainViewController: UITabBarController {
     }
 }
 
-extension MainViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let coordinates: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        self.coords = coordinates
-    }
-    
-    func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
-        print("paused location updates")
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
-    }
-}

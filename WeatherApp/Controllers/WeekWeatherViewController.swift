@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import CoreLocation
 
 class WeekWeatherViewController: UIViewController {
     
     var weatherViewModel: WeekWeatherViewModel? = nil
     let tableView: UITableView = UITableView()
     
-    var coordinates: CLLocationCoordinate2D? {
+    var coordinates: Coordinates? {
         didSet {
             getWeatherData()
         }

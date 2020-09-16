@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreLocation
 
 class CurrentWeatherViewController: UIViewController {
     
@@ -15,7 +14,7 @@ class CurrentWeatherViewController: UIViewController {
     var weatherView: CurrentWeatherView? = nil
     let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .medium)
     
-    var coordinates: CLLocationCoordinate2D? {
+    var coordinates: Coordinates? {
         didSet {
             getWeatherData()
         }

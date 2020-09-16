@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0360DA38251245B30084124A /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0360DA37251245B30084124A /* LocationManager.swift */; };
+		0360DA3A25124F9D0084124A /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0360DA3925124F9D0084124A /* Coordinates.swift */; };
 		03C7565E2507BA2A00447E2F /* WeekWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C7565D2507BA2A00447E2F /* WeekWeatherViewController.swift */; };
 		03C756602507C00400447E2F /* WeekWeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C7565F2507C00400447E2F /* WeekWeatherViewModel.swift */; };
 		03C756622508D6E000447E2F /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C756612508D6E000447E2F /* WeatherTableViewCell.swift */; };
@@ -43,6 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0360DA37251245B30084124A /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		0360DA3925124F9D0084124A /* Coordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Coordinates.swift; path = WeatherApp/Models/Coordinates.swift; sourceTree = SOURCE_ROOT; };
 		03C7565D2507BA2A00447E2F /* WeekWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekWeatherViewController.swift; sourceTree = "<group>"; };
 		03C7565F2507C00400447E2F /* WeekWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekWeatherViewModel.swift; sourceTree = "<group>"; };
 		03C756612508D6E000447E2F /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
@@ -121,6 +125,7 @@
 				03F5489825025DBC003291E0 /* Views */,
 				03F5485825010E0C003291E0 /* AppDelegate.swift */,
 				03F5489125012750003291E0 /* JSONParser.swift */,
+				0360DA37251245B30084124A /* LocationManager.swift */,
 				03F5486425010E0F003291E0 /* Assets.xcassets */,
 				03F5486625010E0F003291E0 /* LaunchScreen.storyboard */,
 				03F5486925010E0F003291E0 /* Info.plist */,
@@ -161,6 +166,7 @@
 			children = (
 				03F5488D2501241B003291E0 /* WeatherModels.swift */,
 				03C75663250979EC00447E2F /* WeekWeather.swift */,
+				0360DA3925124F9D0084124A /* Coordinates.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -323,9 +329,11 @@
 				03F5485925010E0C003291E0 /* AppDelegate.swift in Sources */,
 				03F548A22503939B003291E0 /* InfoElement.swift in Sources */,
 				03C75664250979EC00447E2F /* WeekWeather.swift in Sources */,
+				0360DA3A25124F9D0084124A /* Coordinates.swift in Sources */,
 				03F54896250258EC003291E0 /* MainViewController.swift in Sources */,
 				03F5489A25025DF3003291E0 /* CurrentWeatherViewModel.swift in Sources */,
 				03C756602507C00400447E2F /* WeekWeatherViewModel.swift in Sources */,
+				0360DA38251245B30084124A /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

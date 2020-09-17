@@ -66,19 +66,20 @@ extension CurrentWeatherViewController {
     private func getWeatherData() {
         
         let parser = NetworkManager()
-        parser.getCurrentWeather(url: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates!.latitude)&lon=\(coordinates!.longitude)&appid=") { (weather) in
-            self.weatherViewModel = CurrentWeatherViewModel(currentWeather: weather)
-            DispatchQueue.main.async {
-                self.weatherView = CurrentWeatherView()
-                self.weatherView?.weather = self.weatherViewModel
-                self.view.addSubview(self.weatherView!)
-                
-                self.weatherView?.shareButton.addTarget(self, action: #selector(self.share), for: .touchUpInside)
-                
-                self.activityIndicator.stopAnimating()
+        if let coordinates = self.coordinates {
+            parser.getCurrentWeather(coordinates: coordinates) { (weather) in
+                self.weatherViewModel = CurrentWeatherViewModel(currentWeather: weather)
+                DispatchQueue.main.async {
+                    self.weatherView = CurrentWeatherView()
+                    self.weatherView?.weather = self.weatherViewModel
+                    self.view.addSubview(self.weatherView!)
+                    
+                    self.weatherView?.shareButton.addTarget(self, action: #selector(self.share), for: .touchUpInside)
+                    
+                    self.activityIndicator.stopAnimating()
+                }
             }
         }
-        
     }
     
     @objc func share() {

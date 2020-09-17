@@ -9,12 +9,12 @@
 import Foundation
 
 
-let apiKey = "bcb8b5667d5b57bf338f17d31d0b0e1e"
+fileprivate let apiKey = "bcb8b5667d5b57bf338f17d31d0b0e1e"
 
 class NetworkManager {
     
-    func getCurrentWeather(url: String, completionHandler: ((CurrentWeather) -> Void)?) {
-        let request = URLRequest(url: URL(string: url + apiKey)!)
+    func getCurrentWeather(coordinates: Coordinates, completionHandler: ((CurrentWeather) -> Void)?) {
+        let request = URLRequest(url: URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=\(apiKey)")!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (jsonData, _, error) in
             
@@ -29,11 +29,13 @@ class NetworkManager {
             let decoder = JSONDecoder()
             do {
                 let weatherData = try decoder.decode(CurrentWeather.self, from: jsonData!)
-                completionHandler!(weatherData)
+                if let completionHandler = completionHandler {
+                    completionHandler(weatherData)
+                }
             } catch {
                 print(error.localizedDescription)
             }
-                
+            
             
         }
         
@@ -41,9 +43,15 @@ class NetworkManager {
         
     }
     
-    func getWeekWeather(url: String, completionHandler: ((WeekWeatherModel) -> Void)?) {
+    func getWeekWeather(coordinates: Coordinates, completionHandler: ((WeekWeatherModel) -> Void)?) {
         
-        let request = URLRequest(url: URL(string: url + apiKey)!)
+        do {
+            try validateCoordinates(coordinates: coordinates)
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        let request = URLRequest(url: URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=\(apiKey)")!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (jsonData, _, error) in
             
@@ -58,15 +66,47 @@ class NetworkManager {
             let decoder = JSONDecoder()
             do {
                 let weatherData = try decoder.decode(WeekWeatherModel.self, from: jsonData!)
-                completionHandler!(weatherData)
+                if let completionHandler = completionHandler {
+                    completionHandler(weatherData)
+                }
+//                completionHandler!(weatherData)
             } catch {
                 print(request.url!)
                 print(error.localizedDescription)
             }
-                
+            
             
         }
         
         task.resume()
     }
+    
+    func validateCoordinates(coordinates: Coordinates) throws {
+        if (0...90).contains(coordinates.latitude) && (0...180).contains(coordinates.longitude) {
+            return
+        }
+        throw CoordinateError.invalidCoordinates
+    }
 }
+
+enum CoordinateError: LocalizedError {
+    case invalidCoordinates
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidCoordinates:
+            return "Invalid coorindates"
+        }
+    }
+}
+//
+//enum PossibleError: LocalizedError {
+//    case connectionLoss
+//    
+//    var errorDescription: String? {
+//        switch self {
+//        case .connectionLoss:
+//            return "Connection loss"
+//        }
+//    }
+//}

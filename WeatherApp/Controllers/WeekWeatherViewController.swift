@@ -59,15 +59,14 @@ class WeekWeatherViewController: UIViewController {
     
     private func getWeatherData() {
         let parser = NetworkManager()
-        parser.getWeekWeather(url: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates!.latitude)&lon=\(coordinates!.longitude)&appid=") { (weather) in
-            self.weatherViewModel = WeekWeatherViewModel(weekWeather: weather)
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+        if let coordinates = self.coordinates {
+            parser.getWeekWeather(coordinates: coordinates) { (weather) in
+                self.weatherViewModel = WeekWeatherViewModel(weekWeather: weather)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
-            
-            
         }
-        
     }
     
 }

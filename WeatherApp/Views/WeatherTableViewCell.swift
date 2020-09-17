@@ -24,9 +24,6 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.textColor = .systemBlue
         temperatureLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
-        //        self.textLabel = weatherTypeLabel
-        //        self.detailTextLabel = timeLabel
-        
         let infoStack = UIStackView(arrangedSubviews: [timeLabel, weatherTypeLabel])
         infoStack.axis = .vertical
         infoStack.distribution = .equalCentering
@@ -52,7 +49,8 @@ class WeatherTableViewCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        
+        super.init(coder: coder)
     }
     
     override func awakeFromNib() {

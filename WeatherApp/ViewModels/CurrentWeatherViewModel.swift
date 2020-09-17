@@ -104,28 +104,29 @@ class CurrentWeatherViewModel {
     }
     
     public var feelsLike: String {
-        return "\(currentWeather.main.feelsLike) ºC"
+        return "\(Int(currentWeather.main.feelsLike - 273.15)) ºC"
     }
     
     public var windDirection: String {
-        switch currentWeather.wind.deg {
-        case 330...360, 0..<30:
+        let degrees = currentWeather.wind.deg
+        
+        if (330...360).contains(degrees) || (0..<30).contains(degrees) {
             return "N"
-        case 30..<60:
+        } else if (30..<60).contains(degrees) {
             return "NE"
-        case 60..<120:
+        } else if (60..<120).contains(degrees) {
             return "E"
-        case 120..<150:
+        } else if (120..<150).contains(degrees) {
             return "SE"
-        case 150..<210:
+        } else if (150..<210).contains(degrees) {
             return "S"
-        case 210..<240:
+        } else if (210..<240).contains(degrees) {
             return "SW"
-        case 240..<300:
+        } else if (240..<300).contains(degrees) {
             return "W"
-        case 300..<330:
+        } else if (300..<330).contains(degrees) {
             return "NW"
-        default:
+        } else {
             return ""
         }
     }

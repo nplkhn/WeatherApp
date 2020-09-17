@@ -39,14 +39,13 @@ struct WeekList: Codable {
     let wind: Wind
     let visibility: Int
     let pop: Double
+    let rain: WeekRain?
     let sys: WeekSys
     let dtTxt: String
-    let rain: WeekRain?
 
     enum CodingKeys: String, CodingKey {
-        case dt, main, weather, clouds, wind, visibility, pop, sys
+        case dt, main, weather, clouds, wind, visibility, pop, rain, sys
         case dtTxt = "dt_txt"
-        case rain
     }
 }
 
@@ -118,6 +117,7 @@ enum Description: String, Codable {
     case clearSky = "clear sky"
     case fewClouds = "few clouds"
     case lightRain = "light rain"
+    case moderateRain = "moderate rain"
     case overcastClouds = "overcast clouds"
     case scatteredClouds = "scattered clouds"
 }

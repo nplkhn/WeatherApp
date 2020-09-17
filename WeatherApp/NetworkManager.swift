@@ -11,9 +11,9 @@ import Foundation
 
 let apiKey = "bcb8b5667d5b57bf338f17d31d0b0e1e"
 
-class weatherDataParser {
+class NetworkManager {
     
-    func parseCurrentWeather(url: String, completionHandler: ((CurrentWeather) -> Void)?) {
+    func getCurrentWeather(url: String, completionHandler: ((CurrentWeather) -> Void)?) {
         let request = URLRequest(url: URL(string: url + apiKey)!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (jsonData, _, error) in
@@ -41,7 +41,7 @@ class weatherDataParser {
         
     }
     
-    func parseWeekWeather(url: String, completionHandler: ((WeekWeatherModel) -> Void)?) {
+    func getWeekWeather(url: String, completionHandler: ((WeekWeatherModel) -> Void)?) {
         
         let request = URLRequest(url: URL(string: url + apiKey)!)
         let session = URLSession.shared
@@ -60,6 +60,7 @@ class weatherDataParser {
                 let weatherData = try decoder.decode(WeekWeatherModel.self, from: jsonData!)
                 completionHandler!(weatherData)
             } catch {
+                print(request.url!)
                 print(error.localizedDescription)
             }
                 

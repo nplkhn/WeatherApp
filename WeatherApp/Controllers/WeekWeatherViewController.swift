@@ -58,8 +58,8 @@ class WeekWeatherViewController: UIViewController {
     }
     
     private func getWeatherData() {
-        let parser = weatherDataParser()
-        parser.parseWeekWeather(url: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates!.latitude)&lon=\(coordinates!.longitude)&appid=") { (weather) in
+        let parser = NetworkManager()
+        parser.getWeekWeather(url: "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates!.latitude)&lon=\(coordinates!.longitude)&appid=") { (weather) in
             self.weatherViewModel = WeekWeatherViewModel(weekWeather: weather)
             DispatchQueue.main.async {
                 self.tableView.reloadData()

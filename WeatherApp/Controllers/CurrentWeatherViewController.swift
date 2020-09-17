@@ -65,8 +65,8 @@ extension CurrentWeatherViewController {
     
     private func getWeatherData() {
         
-        let parser = weatherDataParser()
-        parser.parseCurrentWeather(url: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates!.latitude)&lon=\(coordinates!.longitude)&appid=") { (weather) in
+        let parser = NetworkManager()
+        parser.getCurrentWeather(url: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates!.latitude)&lon=\(coordinates!.longitude)&appid=") { (weather) in
             self.weatherViewModel = CurrentWeatherViewModel(currentWeather: weather)
             DispatchQueue.main.async {
                 self.weatherView = CurrentWeatherView()

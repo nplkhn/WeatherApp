@@ -29,6 +29,8 @@ class CurrentWeatherViewModel {
         let sunriseHour = Calendar.current.component(.hour, from: sunrise)
         let sunsetHour = Calendar.current.component(.hour, from: sunset)
         
+        
+        
         var resultImage: UIImage?
         let weatherId = currentWeather.weather[0].id
         
@@ -45,7 +47,7 @@ class CurrentWeatherViewModel {
         } else if weatherId == 802 {
             resultImage = UIImage(named: "cloudy")
         } else {
-            if (sunriseHour..<sunsetHour).contains(currentHour) {
+            if (min(sunriseHour, sunsetHour)..<max(sunriseHour, sunsetHour)).contains(currentHour) {
                 if (300...321).contains(weatherId) {
                     resultImage = UIImage(named: "rain-2-d")
                 } else if (500...501).contains(weatherId) {

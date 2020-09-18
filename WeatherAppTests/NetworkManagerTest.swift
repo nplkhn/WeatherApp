@@ -71,7 +71,7 @@ class NetworkManagerTest: XCTestCase {
     let fakeCoordinatesBerlin = Coordinates(latitude: 52.520008, longitude: 13.404954)
     
     // Unhappy pass
-    let fakeCoordinatesUnknown1 = Coordinates(latitude: -53.904541, longitude: 27.561523)
+    let fakeCoordinatesUnknown1 = Coordinates(latitude: -183.904541, longitude: 27.561523)
     let fakeCoordinatesUnknown2 = Coordinates(latitude: 90.000001, longitude: 27.561523)
     let fakeCoordinatesUnknown3 = Coordinates(latitude: 53.904541, longitude: 180.000001)
     

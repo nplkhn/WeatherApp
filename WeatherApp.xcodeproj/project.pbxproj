@@ -11,6 +11,7 @@
 		0360DA3A25124F9D0084124A /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0360DA3925124F9D0084124A /* Coordinates.swift */; };
 		0360DA3C2513800C0084124A /* NetworkManagerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0360DA3B2513800C0084124A /* NetworkManagerTest.swift */; };
 		0360DA3E2513C4A10084124A /* CurrentWeatherViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0360DA3D2513C4A10084124A /* CurrentWeatherViewModelTests.swift */; };
+		0360DA402514C1B60084124A /* WeekWeatherViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0360DA3F2514C1B60084124A /* WeekWeatherViewModelTests.swift */; };
 		03C7565E2507BA2A00447E2F /* WeekWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C7565D2507BA2A00447E2F /* WeekWeatherViewController.swift */; };
 		03C756602507C00400447E2F /* WeekWeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C7565F2507C00400447E2F /* WeekWeatherViewModel.swift */; };
 		03C756622508D6E000447E2F /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C756612508D6E000447E2F /* WeatherTableViewCell.swift */; };
@@ -42,6 +43,7 @@
 		0360DA3925124F9D0084124A /* Coordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Coordinates.swift; path = WeatherApp/Models/Coordinates.swift; sourceTree = SOURCE_ROOT; };
 		0360DA3B2513800C0084124A /* NetworkManagerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerTest.swift; sourceTree = "<group>"; };
 		0360DA3D2513C4A10084124A /* CurrentWeatherViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherViewModelTests.swift; sourceTree = "<group>"; };
+		0360DA3F2514C1B60084124A /* WeekWeatherViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekWeatherViewModelTests.swift; sourceTree = "<group>"; };
 		03C7565D2507BA2A00447E2F /* WeekWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekWeatherViewController.swift; sourceTree = "<group>"; };
 		03C7565F2507C00400447E2F /* WeekWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekWeatherViewModel.swift; sourceTree = "<group>"; };
 		03C756612508D6E000447E2F /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				03F5487425010E0F003291E0 /* Info.plist */,
 				0360DA3B2513800C0084124A /* NetworkManagerTest.swift */,
 				0360DA3D2513C4A10084124A /* CurrentWeatherViewModelTests.swift */,
+				0360DA3F2514C1B60084124A /* WeekWeatherViewModelTests.swift */,
 			);
 			path = WeatherAppTests;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0360DA402514C1B60084124A /* WeekWeatherViewModelTests.swift in Sources */,
 				0360DA3E2513C4A10084124A /* CurrentWeatherViewModelTests.swift in Sources */,
 				0360DA3C2513800C0084124A /* NetworkManagerTest.swift in Sources */,
 			);

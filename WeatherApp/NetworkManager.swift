@@ -17,7 +17,6 @@ class NetworkManager {
         let request = URLRequest(url: URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=\(apiKey)")!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (jsonData, _, error) in
-            
             guard jsonData != nil else {
                 if let error = error {
                     print(error.localizedDescription)
@@ -69,9 +68,7 @@ class NetworkManager {
                 if let completionHandler = completionHandler {
                     completionHandler(weatherData)
                 }
-//                completionHandler!(weatherData)
             } catch {
-                print(request.url!)
                 print(error.localizedDescription)
             }
             
@@ -82,10 +79,10 @@ class NetworkManager {
     }
     
     func validateCoordinates(coordinates: Coordinates) throws {
-        if (0...90).contains(coordinates.latitude) && (0...180).contains(coordinates.longitude) {
-            return
+        if !(-90...90).contains(coordinates.latitude) || !(-180...180).contains(coordinates.longitude) {
+            throw CoordinateError.invalidCoordinates
         }
-        throw CoordinateError.invalidCoordinates
+        
     }
 }
 
@@ -99,14 +96,3 @@ enum CoordinateError: LocalizedError {
         }
     }
 }
-//
-//enum PossibleError: LocalizedError {
-//    case connectionLoss
-//    
-//    var errorDescription: String? {
-//        switch self {
-//        case .connectionLoss:
-//            return "Connection loss"
-//        }
-//    }
-//}
